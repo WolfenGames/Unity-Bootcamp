@@ -31,13 +31,14 @@ public class playerScript_ex00 : MonoBehaviour
     {
 		canJump = true;
 		combo = new Dictionary<KeyCode, int>();
-        combo.Add(Claire, 0);
-		combo.Add(Thomas, 1);
-		combo.Add(John, 2);
-		players = GameObject.FindGameObjectsWithTag("Player");
+		combo.Add(Thomas, 0);
+		combo.Add(John, 1);
+        combo.Add(Claire, 2);
+		// players = GameObject.FindGameObjectsWithTag("Player");
 		foreach(GameObject obj in players)
 		{
-			obj.GetComponent<Rigidbody2D>().mass = ~(1 << 31);
+			obj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+			// obj.GetComponent<Rigidbody2D>().mass = ~(1 << 31);
 			obj.GetComponent<Rigidbody2D>().sharedMaterial = frictionless;
 		}
 		activeSelf = players[0];
@@ -83,28 +84,28 @@ public class playerScript_ex00 : MonoBehaviour
 		if (Input.GetKeyDown(Claire))
 		{
 			GetPlayer(Claire);
-			jumpForce = 2f;
+			jumpForce = 3.6f;
 		}
 		if (Input.GetKeyDown(John))
 		{
 			GetPlayer(John);
-			jumpForce = 4f;
+			jumpForce = 4.1f;
 		}
 		if (Input.GetKeyDown(Thomas))
 		{
 			GetPlayer(Thomas);
-			jumpForce = 3f;
+			jumpForce = 4.33f;
 		}
 	}
 
 	bool	CanJumpFun()
 	{
 		Vector2 x = new Vector2(
-			activeSelf.transform.position.x - activeSelf2d.GetComponentInChildren<Collider2D>().bounds.extents.x, 0.1f
+			activeSelf.transform.position.x - activeSelf2d.GetComponentInChildren<Collider2D>().bounds.extents.x, activeSelf.transform.position.y - 0.03f
 		);
 		return (Physics2D.Raycast(x,
 									Vector2.right, 
-									2.1f * activeSelf2d.GetComponentInChildren<Collider2D>().bounds.extents.x));
+									2 * activeSelf2d.GetComponentInChildren<Collider2D>().bounds.extents.x));
 	}
 
 	void	GetPlayer(KeyCode key)
@@ -114,12 +115,13 @@ public class playerScript_ex00 : MonoBehaviour
 		if (activeSelf2d)
 		{
 			activeSelf2d.sharedMaterial = frictionless;
-			activeSelf2d.mass = ~(1 << 31);
+			// activeSelf2d.mass = ~(1 << 31);
 			activeSelf2d.velocity = new Vector2(0, activeSelf2d.velocity.y);
+			activeSelf2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 		}
 		activeSelf = players[val];
 		activeSelf2d = activeSelf.GetComponent<Rigidbody2D>();
-		activeSelf2d.mass = 1;
-		// activeSelf2d.sharedMaterial = null;
+		activeSelf2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+		// activeSelf2d.mass = 1;
 	}
 }

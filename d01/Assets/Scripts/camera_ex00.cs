@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class camera : MonoBehaviour
+public class camera_ex00 : MonoBehaviour
 {
 	Vector3		playerPos;
 	[SerializeField]
