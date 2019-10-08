@@ -97,9 +97,10 @@ public class playerScript_ex03 : MonoBehaviour
 		{
 			activeSelf2d.velocity = new Vector2(MovSpeed, activeSelf2d.velocity.y);
 		}
-		if (Input.GetKeyDown(KeyCode.Space) && CanJumpFun())
+		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			activeSelf2d.velocity = new Vector2(activeSelf2d.velocity.x, jumpForce);
+			if (CanJumpFun()) activeSelf2d.velocity = new Vector2(activeSelf2d.velocity.x, jumpForce);
+			if (!CanJumpFun()) activeSelf.transform.parent = null;
 		}
 	}
 
@@ -139,15 +140,27 @@ public class playerScript_ex03 : MonoBehaviour
 		if (activeSelf2d)
 		{
 			activeSelf2d.sharedMaterial = frictionless;
-			// activeSelf2d.mass = ~(1 << 31);
 			activeSelf2d.velocity = new Vector2(0, activeSelf2d.velocity.y);
 			activeSelf2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 		}
 		activeSelf = players[val];
 		activeSelf2d = activeSelf.GetComponent<Rigidbody2D>();
 		activeSelf2d.constraints = RigidbodyConstraints2D.FreezeRotation;
-		// activeSelf2d.mass = 1;
 	}
+
+	void	OnCollisionEnter2D(Collision2D col)
+	{
+		if (col?.transform?.name != null)
+		{
+			Vector2 x = new Vector2(
+			activeSelf.transform.position.x - activeSelf2d.GetComponentInChildren<Collider2D>().bounds.extents.x, activeSelf.transform.position.y - 0.03f);
+			RaycastHit2D hit =  Physics2D.Raycast(x,
+										Vector2.right, 
+										2 * activeSelf2d.GetComponentInChildren<Collider2D>().bounds.extents.x);
+			if (hit && hit.transform.gameObject == col?.transform?.gameObject) activeSelf.transform.parent = col.transform;
+		}
+	}
+
 	void	OnTriggerEnter2D(Collider2D collision)
     {
 		if (activeSelf)
@@ -169,6 +182,8 @@ public class playerScript_ex03 : MonoBehaviour
 				default:
 					break;
 			}
+			if (collision?.transform?.parent?.tag == "TeleportIn")
+				activeSelf.transform.position = collision.transform.parent.GetComponent<Teleport>().Destination.position;
 		}
     }
 
