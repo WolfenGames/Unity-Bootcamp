@@ -4,27 +4,36 @@ using UnityEngine;
 
 public class Pipe : MonoBehaviour
 {
-	[SerializeField]
-	private GameObject[]		SpawnedPipes;
-	private	float				timeToSpawn;
+	public GameObject[]			SpawnedPipes;
     Vector3						dirthing;
+	float						movespeed;
+	static float				timeSinceStart = 0;
 	// Start is called before the first frame update
     void Start()
     {
-		timeToSpawn = 4f;
+		movespeed = 10.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-		foreach(GameObject obj in SpawnedPipes)
+		if (Bird.dided == false)
 		{
-			dirthing = new Vector3(-3 * Time.deltaTime, 0, 0);
-			obj.transform.Translate(dirthing);
-			if (obj.transform.position.x <= -10f)
+			timeSinceStart += Time.deltaTime;
+			foreach(GameObject obj in SpawnedPipes)
 			{
-				Vector3 newpos = new Vector3(10, 0, 0);
-				obj.transform.position = newpos;
+				dirthing = new Vector3(-movespeed * Time.deltaTime, 0, 0);
+				obj.transform.Translate(dirthing);
+				if (obj.transform.position.x <= -10f)
+				{
+					Vector3 newpos = new Vector3(10, 0, 0);
+					obj.transform.position = newpos;
+				}
+			}
+			if (timeSinceStart >= 10)
+			{
+				movespeed += 10;
+				timeSinceStart = 0;
 			}
 		}
     }
