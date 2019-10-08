@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class playerScript_ex01 : MonoBehaviour
-{	Dictionary<KeyCode, int>	combo;
+{
+	Dictionary<KeyCode, int>	combo;
 	public static GameObject	activeSelf;
 
 	[SerializeField]
@@ -15,25 +16,26 @@ public class playerScript_ex01 : MonoBehaviour
 	PhysicsMaterial2D			frictionless;
 
 	[SerializeField]
-	float						jumpForce;
+	static float				jumpForce;
 
-	KeyCode	Claire  			= KeyCode.Alpha1;
+	KeyCode	Claire  			= KeyCode.Alpha3;
 	KeyCode	John				= KeyCode.Alpha2;
-	KeyCode	Thomas				= KeyCode.Alpha3;
+	KeyCode	Thomas				= KeyCode.Alpha1;
 
 	[SerializeField]
 	float	MovSpeed;
-	[SerializeField]
-	bool	canJump;
+	static bool[]	exits =  new bool[3] { false, false, false };
+	bool	won;
+
     // Start is called before the first frame update
     void Start()
     {
-		canJump = true;
+		won = false;
 		combo = new Dictionary<KeyCode, int>();
-        combo.Add(Claire, 0);
-		combo.Add(Thomas, 1);
-		combo.Add(John, 2);
-		players = GameObject.FindGameObjectsWithTag("Player");
+		combo.Add(Thomas, 0);
+		combo.Add(John, 1);
+        combo.Add(Claire, 2);
+		// players = GameObject.FindGameObjectsWithTag("Player");
 		foreach(GameObject obj in players)
 		{
 			obj.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
@@ -42,23 +44,42 @@ public class playerScript_ex01 : MonoBehaviour
 		}
 		activeSelf = players[0];
 		GetPlayer(Thomas);
+		jumpForce = 4.33f;
 	}
 
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Backspace))
-			restartCurrentScene();
-		SwitchChars();
+		if (!won)
+		{
+			if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Backspace))
+				restartCurrentScene();
+			SwitchChars();
+			won = (exits[0] && exits[1] && exits[2]);
+		}else
+		{
+			foreach(GameObject obj in players)
+			{
+				obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+			}
+			Debug.Log("WON!!!");
+			GotoNextLevel();
+		}
     }
 
 	void restartCurrentScene(){ 
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
+	void GotoNextLevel()
+	{
+		SceneManager.LoadScene(Camera.main.GetComponent<camera_ex01>().levelName);
+	}
+
 	void FixedUpdate()
 	{
-		MovChars();
+		if (!won)
+			MovChars();
 	}
 
 	void	MovChars()
@@ -88,7 +109,7 @@ public class playerScript_ex01 : MonoBehaviour
 		if (Input.GetKeyDown(John))
 		{
 			GetPlayer(John);
-			jumpForce = 4.1f;
+			jumpForce = 4.6f;
 		}
 		if (Input.GetKeyDown(Thomas))
 		{
@@ -114,47 +135,60 @@ public class playerScript_ex01 : MonoBehaviour
 		if (activeSelf2d)
 		{
 			activeSelf2d.sharedMaterial = frictionless;
+			// activeSelf2d.mass = ~(1 << 31);
 			activeSelf2d.velocity = new Vector2(0, activeSelf2d.velocity.y);
 			activeSelf2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 		}
 		activeSelf = players[val];
 		activeSelf2d = activeSelf.GetComponent<Rigidbody2D>();
 		activeSelf2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+		// activeSelf2d.mass = 1;
 	}
-
-	void	OnCollisionEnter2D(Collision2D collision)
+	void	OnTriggerEnter2D(Collider2D collision)
     {
-		switch (collision.transform.tag)
+		if (activeSelf)
 		{
-			case "BlueExit":
-				Debug.Log("Blue can exit");
-				break;
-			case "RedExit":
-				Debug.Log("Red can exit");
-				break;
-			case "YellowExit":
-				Debug.Log("Yellow can Exit");
-				break;
-			default:
-				break;
+			switch (collision.transform.tag)
+			{
+				case "BlueExit":
+					if (activeSelf.name == "Claire")
+						exits[2] = true;
+					break;
+				case "RedExit":
+					if (activeSelf.name == "Thomas")
+						exits[0] = true;
+					break;
+				case "YellowExit":
+					if (activeSelf.name == "John")
+						exits[1] = true;
+					break;
+				default:
+					break;
+			}
 		}
     }
 
-	void	OnCollisionExit2D(Collision2D collision)
+	void	OnTriggerExit2D(Collider2D collision)
     {
-		switch (collision.transform.tag)
+		if (activeSelf)
 		{
-			case "BlueExit":
-				Debug.Log("Blue no Exit");
-				break;
-			case "RedExit":
-				Debug.Log("Red no Exit");
-				break;
-			case "YellowExit":
-				Debug.Log("Yellow no Exit");
-				break;
-			default:
-				break;
+			switch (collision.transform.tag)
+			{
+				case "BlueExit":
+					if (activeSelf.name == "Claire")
+						exits[2] = false;
+					break;
+				case "RedExit":
+					if (activeSelf.name == "Thomas")
+						exits[0] = false;
+					break;
+				case "YellowExit":
+					if (activeSelf.name == "John")
+						exits[1] = false;
+					break;
+				default:
+					break;
+			}
 		}
     }
 }

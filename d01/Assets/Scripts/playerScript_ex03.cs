@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class playerScript_ex00 : MonoBehaviour
+public class playerScript_ex03 : MonoBehaviour
 {
 	Dictionary<KeyCode, int>	combo;
 	public static GameObject	activeSelf;
@@ -18,15 +18,22 @@ public class playerScript_ex00 : MonoBehaviour
 	[SerializeField]
 	static float				jumpForce;
 
-	KeyCode	Claire  			= KeyCode.Alpha1;
+	KeyCode	Claire  			= KeyCode.Alpha3;
 	KeyCode	John				= KeyCode.Alpha2;
-	KeyCode	Thomas				= KeyCode.Alpha3;
+	KeyCode	Thomas				= KeyCode.Alpha1;
 
 	[SerializeField]
 	float	MovSpeed;
+	static bool[]	exits =  new bool[3] { false, false, false };
+	bool	won;
+
+	[SerializeField]
+	public static 	bool	canTransition;
+
     // Start is called before the first frame update
     void Start()
     {
+		won = false;
 		combo = new Dictionary<KeyCode, int>();
 		combo.Add(Thomas, 0);
 		combo.Add(John, 1);
@@ -40,23 +47,43 @@ public class playerScript_ex00 : MonoBehaviour
 		}
 		activeSelf = players[0];
 		GetPlayer(Thomas);
+		jumpForce = 4.33f;
 	}
 
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Backspace))
-			restartCurrentScene();
-		SwitchChars();
+		if (!won)
+		{
+			if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Backspace))
+				restartCurrentScene();
+			SwitchChars();
+			won = (exits[0] && exits[1] && exits[2]);
+		}else
+		{
+			foreach(GameObject obj in players)
+			{
+				obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+			}
+			Debug.Log("WON!!!");
+			GotoNextLevel();
+		}
     }
 
 	void restartCurrentScene(){ 
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
+	void GotoNextLevel()
+	{
+		if (canTransition)
+			SceneManager.LoadScene(Camera.main.GetComponent<camera_ex02>().levelName);
+	}
+
 	void FixedUpdate()
 	{
-		MovChars();
+		if (!won)
+			MovChars();
 	}
 
 	void	MovChars()
@@ -86,7 +113,7 @@ public class playerScript_ex00 : MonoBehaviour
 		if (Input.GetKeyDown(John))
 		{
 			GetPlayer(John);
-			jumpForce = 4.1f;
+			jumpForce = 4.6f;
 		}
 		if (Input.GetKeyDown(Thomas))
 		{
@@ -121,4 +148,51 @@ public class playerScript_ex00 : MonoBehaviour
 		activeSelf2d.constraints = RigidbodyConstraints2D.FreezeRotation;
 		// activeSelf2d.mass = 1;
 	}
+	void	OnTriggerEnter2D(Collider2D collision)
+    {
+		if (activeSelf)
+		{
+			switch (collision.transform.tag)
+			{
+				case "BlueExit":
+					if (activeSelf.name == "Claire")
+						exits[2] = true;
+					break;
+				case "RedExit":
+					if (activeSelf.name == "Thomas")
+						exits[0] = true;
+					break;
+				case "YellowExit":
+					if (activeSelf.name == "John")
+						exits[1] = true;
+					break;
+				default:
+					break;
+			}
+		}
+    }
+
+	void	OnTriggerExit2D(Collider2D collision)
+    {
+		if (activeSelf)
+		{
+			switch (collision.transform.tag)
+			{
+				case "BlueExit":
+					if (activeSelf.name == "Claire")
+						exits[2] = false;
+					break;
+				case "RedExit":
+					if (activeSelf.name == "Thomas")
+						exits[0] = false;
+					break;
+				case "YellowExit":
+					if (activeSelf.name == "John")
+						exits[1] = false;
+					break;
+				default:
+					break;
+			}
+		}
+    }
 }

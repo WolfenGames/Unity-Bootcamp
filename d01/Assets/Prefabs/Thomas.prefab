@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8442443386451952858}
   - component: {fileID: 8442443386451952859}
   - component: {fileID: 775842224077406503}
+  - component: {fileID: 2385782931349687850}
+  - component: {fileID: -6841521069042814187}
   - component: {fileID: 8442443386451952860}
   m_Layer: 0
   m_Name: Thomas
@@ -48,9 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players: []
   frictionless: {fileID: 6200000, guid: 1244fb4c4f50d414db115f5f686236b5, type: 2}
-  jumpForce: 0
   MovSpeed: 1
-  canJump: 0
 --- !u!114 &775842224077406503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,9 +65,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players: []
   frictionless: {fileID: 0}
-  jumpForce: 0
   MovSpeed: 0
-  canJump: 0
+--- !u!114 &2385782931349687850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8442443386451952857}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9da625609b90a495aac8d5bb384059ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
+  frictionless: {fileID: 0}
+  MovSpeed: 0
+--- !u!114 &-6841521069042814187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8442443386451952857}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd09c303b2e7149429154976da981498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
+  frictionless: {fileID: 0}
+  MovSpeed: 0
 --- !u!50 &8442443386451952860
 Rigidbody2D:
   serializedVersion: 4

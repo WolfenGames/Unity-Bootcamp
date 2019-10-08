@@ -118,6 +118,8 @@ GameObject:
   - component: {fileID: 8518980234379553124}
   - component: {fileID: 8518980234379553127}
   - component: {fileID: 7818427647513143536}
+  - component: {fileID: 3391533815760702692}
+  - component: {fileID: 1499923268385613876}
   - component: {fileID: 8518980234379553126}
   m_Layer: 0
   m_Name: Claire
@@ -155,9 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players: []
   frictionless: {fileID: 6200000, guid: 1244fb4c4f50d414db115f5f686236b5, type: 2}
-  jumpForce: 0
   MovSpeed: 1
-  canJump: 0
 --- !u!114 &7818427647513143536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,9 +172,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players: []
   frictionless: {fileID: 0}
-  jumpForce: 0
   MovSpeed: 0
-  canJump: 0
+--- !u!114 &3391533815760702692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8518980234379553125}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9da625609b90a495aac8d5bb384059ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
+  frictionless: {fileID: 0}
+  MovSpeed: 0
+--- !u!114 &1499923268385613876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8518980234379553125}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd09c303b2e7149429154976da981498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
+  frictionless: {fileID: 0}
+  MovSpeed: 0
 --- !u!50 &8518980234379553126
 Rigidbody2D:
   serializedVersion: 4
