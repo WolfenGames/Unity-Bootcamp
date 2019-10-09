@@ -15,6 +15,8 @@ public class Buttons : MonoBehaviour
 		Disable,
 	}
 	[SerializeField]
+	bool		onceOff;
+	[SerializeField]
 	ButtonType Type1;
 	[SerializeField]
 	ButtonType Type2;
@@ -35,7 +37,6 @@ public class Buttons : MonoBehaviour
     void Start()
     {
 		_sprite = this.GetComponentInChildren<SpriteRenderer>();
-		ChangeColor();
     }
 
 	void	ChangeColor()
@@ -67,4 +68,27 @@ public class Buttons : MonoBehaviour
     void Update()
     {
     }
+
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		if (collision?.transform?.tag == "Player")
+		{
+			switch (collision.transform.name)
+			{
+				case "Thomas":
+					switch (Type1)
+					{
+						case ButtonType.Absorb:
+							if (requiredColor == RequiredColor.Red)
+								ChangeColor();
+							break;
+					}
+					break;
+				case "John":
+					break;
+				case "Claire":
+					break;
+			}
+		}
+	}
 }
