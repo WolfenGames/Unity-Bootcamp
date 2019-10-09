@@ -30,6 +30,7 @@ public class playerScript_ex02 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+		exits = new bool[3] { false, false, false};
 		won = false;
 		combo = new Dictionary<KeyCode, int>();
 		combo.Add(Thomas, 0);
@@ -73,6 +74,7 @@ public class playerScript_ex02 : MonoBehaviour
 
 	void GotoNextLevel()
 	{
+		exits = new bool[3] { false, false, false};
 		SceneManager.LoadScene(Camera.main.GetComponent<camera_ex02>().levelName);
 	}
 

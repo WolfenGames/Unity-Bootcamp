@@ -18,9 +18,9 @@ public class playerScript_ex00 : MonoBehaviour
 	[SerializeField]
 	static float				jumpForce;
 
-	KeyCode	Claire  			= KeyCode.Alpha1;
+	KeyCode	Claire  			= KeyCode.Alpha3;
 	KeyCode	John				= KeyCode.Alpha2;
-	KeyCode	Thomas				= KeyCode.Alpha3;
+	KeyCode	Thomas				= KeyCode.Alpha1;
 
 	[SerializeField]
 	float	MovSpeed;
@@ -40,6 +40,7 @@ public class playerScript_ex00 : MonoBehaviour
 		}
 		activeSelf = players[0];
 		GetPlayer(Thomas);
+		jumpForce = 4.33f;
 	}
 
     // Update is called once per frame
@@ -70,9 +71,9 @@ public class playerScript_ex00 : MonoBehaviour
 		{
 			activeSelf2d.velocity = new Vector2(MovSpeed, activeSelf2d.velocity.y);
 		}
-		if (Input.GetKeyDown(KeyCode.Space) && CanJumpFun())
+		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			activeSelf2d.velocity = new Vector2(activeSelf2d.velocity.x, jumpForce);
+			if (CanJumpFun()) activeSelf2d.velocity = new Vector2(activeSelf2d.velocity.x, jumpForce);
 		}
 	}
 
@@ -80,18 +81,18 @@ public class playerScript_ex00 : MonoBehaviour
 	{
 		if (Input.GetKeyDown(Claire))
 		{
-			GetPlayer(Claire);
 			jumpForce = 3.6f;
+			GetPlayer(Claire);
 		}
 		if (Input.GetKeyDown(John))
 		{
-			GetPlayer(John);
 			jumpForce = 4.1f;
+			GetPlayer(John);
 		}
 		if (Input.GetKeyDown(Thomas))
 		{
-			GetPlayer(Thomas);
 			jumpForce = 4.33f;
+			GetPlayer(Thomas);
 		}
 	}
 

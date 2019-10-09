@@ -108,18 +108,18 @@ public class playerScript_ex03 : MonoBehaviour
 	{
 		if (Input.GetKeyDown(Claire))
 		{
-			GetPlayer(Claire);
 			jumpForce = 3.6f;
+			GetPlayer(Claire);
 		}
 		if (Input.GetKeyDown(John))
 		{
-			GetPlayer(John);
 			jumpForce = 4.6f;
+			GetPlayer(John);
 		}
 		if (Input.GetKeyDown(Thomas))
 		{
-			GetPlayer(Thomas);
 			jumpForce = 4.33f;
+			GetPlayer(Thomas);
 		}
 	}
 
@@ -150,7 +150,7 @@ public class playerScript_ex03 : MonoBehaviour
 
 	void	OnCollisionEnter2D(Collision2D col)
 	{
-		if (col?.transform?.name != null)
+		if (activeSelf && col?.transform?.name != null)
 		{
 			Vector2 x = new Vector2(
 			activeSelf.transform.position.x - activeSelf2d.GetComponentInChildren<Collider2D>().bounds.extents.x, activeSelf.transform.position.y - 0.03f);
