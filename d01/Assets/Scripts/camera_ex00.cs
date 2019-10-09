@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class camera_ex00 : MonoBehaviour
 {
@@ -12,6 +13,12 @@ public class camera_ex00 : MonoBehaviour
     {
         playerPos = new Vector3();
     }
+
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Keypad5))
+			SceneManager.LoadScene("ex01");
+	}
 
     // Update is called once per frame
     void FixedUpdate()

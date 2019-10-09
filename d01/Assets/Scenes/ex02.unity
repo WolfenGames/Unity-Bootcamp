@@ -703,7 +703,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lerpSpeed: 3
-  levelName: ex01
+  levelName: ex03
 --- !u!1 &1332692854 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8442443386451952857, guid: 3794d451f737f44aaba1a55650e95548,
