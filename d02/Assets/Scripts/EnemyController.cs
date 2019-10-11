@@ -6,11 +6,13 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour, Unit
 {
 	public float health { get; set; }
+	public float oldHealth { get; set; }
 	public float moveSpeed { get; set; }
 	public float damage { get; set; }
 	public bool selectable { get; set; }
 	public bool selected { get; set; }
 	public GameObject target { get; set; }
+	public string myType { get ; set; }
 
 	Animator			animator;
 
@@ -18,6 +20,8 @@ public class EnemyController : MonoBehaviour, Unit
 
 	public void Attack(GameObject gameObject)
 	{
+		Debug.Log(myType + " [" + gameObject.GetComponent<Unit>().health + "/" + gameObject.GetComponent<Unit>().oldHealth + "]HP has been attacked");
+		gameObject.GetComponent<PlayerController>().TakeDamage(this.damage);
 	}
 
 	public void Die()
@@ -41,7 +45,9 @@ public class EnemyController : MonoBehaviour, Unit
     {
 		animator = this.GetComponent<Animator>();
         health = 200;
+		oldHealth = health;
 		damage = 1f;
+		myType = "Orc Unit";
     }
 
     // Update is called once per frame
@@ -69,7 +75,8 @@ public class EnemyController : MonoBehaviour, Unit
 		if (target && minDist < 1.3f)
 		{
 			animator.SetBool("Walking", false);
-			target.GetComponent<PlayerController>().TakeDamage(this.damage);
+			// target.GetComponent<PlayerController>().TakeDamage(this.damage);
+			Attack(target);
 			animator.SetBool("Attacking", true);
 		}else
 		{

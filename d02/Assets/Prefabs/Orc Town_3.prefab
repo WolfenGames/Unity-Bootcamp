@@ -219,8 +219,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7df88106902447d69c61c8b2fab434f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  my_SetType: 
   my_set_health: 1000
   goodOrBad: 1
+  MasterBuilding: {fileID: 0}
+  IsTown: 1
 --- !u!114 &3059783524944637731
 MonoBehaviour:
   m_ObjectHideFlags: 0

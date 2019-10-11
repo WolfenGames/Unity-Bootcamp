@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-	List<GameObject>	actives;
 	public GameObject	Ref_prefab;
 	public Transform	SpawnPoint;
 	float				timeToSpawn, timeSinceLastSpawn;
@@ -14,13 +13,16 @@ public class Spawner : MonoBehaviour
     void Start()
     {
 		timeToSpawn = 10f;
-		actives = new List<GameObject>();
     }
+
+	public void UpdateTime()
+	{
+		timeToSpawn += 2.5f;
+	}
 
     // Update is called once per frame
     void Update()
     {
-		actives = GameObject.FindGameObjectsWithTag("Player").ToList();
         timeSinceLastSpawn += Time.deltaTime;
 		if (timeSinceLastSpawn > timeToSpawn)
 		{

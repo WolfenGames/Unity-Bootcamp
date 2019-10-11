@@ -10,9 +10,14 @@ public class Building : MonoBehaviour, Unit
 	public bool selectable { get; set; }
 	public bool selected { get; set; }
 	public GameObject target { get; set; }
+	public float oldHealth { get; set; }
+	public string myType { get; set; }
+	public string my_SetType;
 
 	public float my_set_health;
 	public bool		goodOrBad;
+	public Spawner MasterBuilding;
+	public bool		IsTown;
 
 	public bool		GetGoodOrBad()
 	{
@@ -26,6 +31,10 @@ public class Building : MonoBehaviour, Unit
 
 	public void Die()
 	{
+		if (IsTown)
+			Debug.Log((!goodOrBad) ? "Orcs Win" : "Humans Win");
+		if (MasterBuilding)
+			MasterBuilding.UpdateTime();
 		GameObject.Destroy(this.gameObject);
 	}
 
@@ -46,6 +55,8 @@ public class Building : MonoBehaviour, Unit
 	void Start()
     {
 		health = my_set_health;
+		oldHealth = health;
+		myType = my_SetType;
     }
 
     // Update is called once per frame

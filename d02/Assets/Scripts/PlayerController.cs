@@ -17,6 +17,8 @@ public class PlayerController :  MonoBehaviour, Unit
 	public bool 		selectable { get; set; }
 	public bool 		selected { get; set; }
 	public GameObject 	target { get; set; }
+	public float 		oldHealth { get; set; }
+	public string myType { get; set; }
 
 	Vector2 thing;
 	List<GameObject>	units;
@@ -25,8 +27,10 @@ public class PlayerController :  MonoBehaviour, Unit
 	// Start is called before the first frame update
 	void Start()
     {
+		myType = "Human Unit";
 		timeOfCollision = 0;
 		health = 100;
+		oldHealth = health;
 		damage = 4;
 		animator = this.GetComponentInChildren<Animator>();
 		dest = this.transform.position.toVec2();
@@ -49,8 +53,11 @@ public class PlayerController :  MonoBehaviour, Unit
 			Random.InitState(Random.Range(0, ~(1 << 31)));
 			try
 			{
-				sound.clip = Clips[Random.Range(0, 4)];
-				sound.Play();
+				if (!sound.isPlaying) 
+				{
+					sound.clip = Clips[Random.Range(0, 4)];
+					sound.Play();
+				}
 			} catch (System.Exception){}
 			dest = vector;
 			animator.SetBool("Walking", true);
@@ -71,8 +78,8 @@ public class PlayerController :  MonoBehaviour, Unit
 			Random.InitState(Random.Range(0, ~(1 << 31)));
 			try
 			{
-				sound.clip = Clips[Random.Range(0, 4)];
-				sound.Play();
+				sound.Stop();
+				sound.PlayOneShot(Clips[Random.Range(0, 4)]);
 			} catch (System.Exception){}
 			dest = vector;
 			animator.SetBool("Walking", true);
@@ -90,13 +97,15 @@ public class PlayerController :  MonoBehaviour, Unit
 			thing.Normalize();
 			animator.SetFloat("DirX", thing.x);
 			animator.SetFloat("DirY", thing.y);
-			if (target && Mathf.Abs((target.transform.position - this.transform.position).magnitude) <= (target.GetComponentInChildren<BoxCollider2D>().bounds.size.magnitude/2) + 0.4f)
+			if (target && 
+						Mathf.Abs((target.transform.position - this.transform.position).magnitude) <= (target.GetComponentInChildren<BoxCollider2D>().bounds.size.magnitude/2) + 0.4f)
 			{
 				animator.SetBool("Attacking", true);
 				animator.SetBool("Walking", false);
 				try
 				{
-					target.GetComponent<PlayerController>().TakeDamage(this.damage);
+					Attack(target);
+					// target.GetComponent<PlayerController>().TakeDamage(this.damage);
 					if (target.GetComponent<PlayerController>().isDead())
 						target = null;
 				} catch (System.Exception)
@@ -104,7 +113,8 @@ public class PlayerController :  MonoBehaviour, Unit
 					Building fish = target.GetComponent<Building>();
 					if (fish && fish.GetGoodOrBad())
 					{
-						fish.TakeDamage(this.damage);
+						Attack(fish.transform.gameObject);
+						// fish.TakeDamage(this.damage);
 						if (!target)
 							target = null;
 					}
@@ -113,6 +123,7 @@ public class PlayerController :  MonoBehaviour, Unit
 				}
 			}else
 			{
+				// sound.Stop();
 				// animator.SetBool("Walking", true);
 				animator.SetBool("Attacking", false);
 				Vector2 newVec = Vector2.MoveTowards(this.transform.position.toVec2(), dest, 3f * Time.fixedDeltaTime);
@@ -132,6 +143,12 @@ public class PlayerController :  MonoBehaviour, Unit
 
 	public void Attack(GameObject gameObject)
 	{
+		// sound.Stop();
+		if  (!sound.isPlaying)
+		{
+			sound.PlayOneShot(Clips[6]);
+		}
+		Debug.Log(myType + " [" + gameObject.GetComponent<Unit>().health + "/" + gameObject.GetComponent<Unit>().oldHealth + "]HP has been attacked");
 		gameObject.GetComponent<Unit>().TakeDamage(this.damage);
 	}
 
@@ -155,8 +172,8 @@ public class PlayerController :  MonoBehaviour, Unit
 
 	public void Die()
 	{
-		sound.clip = Clips[4];
-		sound.Play();
+		if (!sound.clip != Clips[4] && !isDead())
+			sound.PlayOneShot(Clips[4]);
 		animator.SetBool("Die", true);
 		GameObject.Destroy(this.gameObject, 3f);
 	}

@@ -88,11 +88,13 @@ public class MouseController : MonoBehaviour
 						if (!units.Contains(go))
 							units.Add(go);
 					}
+					else
 					if (alt)
 					{
 						if (units.Contains(go))
 							units.Remove(go);
 					}
+					else
 					if (!ctrl && !alt)
 						units.Add(go);
 				}

@@ -137,8 +137,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7df88106902447d69c61c8b2fab434f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  my_SetType: Human Tower
   my_set_health: 1000
   goodOrBad: 0
+  MasterBuilding: {fileID: 0}
+  IsTown: 1
 --- !u!1 &1084438198703129476
 GameObject:
   m_ObjectHideFlags: 0

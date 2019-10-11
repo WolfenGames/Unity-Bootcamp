@@ -120,5 +120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7df88106902447d69c61c8b2fab434f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  my_SetType: Orc lesser building
   my_set_health: 300
   goodOrBad: 1
+  MasterBuilding: {fileID: 0}
+  IsTown: 0
