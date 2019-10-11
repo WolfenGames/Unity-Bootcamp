@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class AddTower : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
 	public GameObject		myObjToSpawn;
+	public GameObject		sprite;
+
 	public Text[]			fields;
 	GameObject				go;
 	static RaycastHit2D		raycastHit2D;
@@ -17,7 +19,7 @@ public class AddTower : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 	
 	void Start()
 	{
-		myObjToSpawn.GetComponentInChildren<towerScript>().enabled = false;
+		// myObjToSpawn.GetComponentInChildren<towerScript>().enabled = false;
 		fields[0].text = string.Format("{0}/{1} s",1, myObjToSpawn.GetComponentInChildren<towerScript>().fireRate.ToString());
 		fields[1].text = myObjToSpawn.GetComponentInChildren<towerScript>().energy.ToString();
 		fields[2].text = myObjToSpawn.GetComponentInChildren<towerScript>().range.ToString();
@@ -30,8 +32,10 @@ public class AddTower : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 	
 	void OnBeginDrag(PointerEventData eventData)
 	{
-		go = GameObject.Instantiate(myObjToSpawn, Camera.main.ScreenToWorldPoint(Input.mousePosition), Quaternion.identity);
-		go.GetComponent<towerScript>().enabled = false;
+		go = GameObject.Instantiate(go, Camera.main.ScreenToWorldPoint(Input.mousePosition), Quaternion.identity);
+		// go = GameObject.Instantiate(myObjToSpawn, Camera.main.ScreenToWorldPoint(Input.mousePosition), Quaternion.identity);
+		// go.GetComponent<towerScript>().enabled = false;
+		// go.GetComponentInChildren<CircleCollider2D>().radius = 0f;
 	}
 
 	private void Update() {
@@ -40,27 +44,37 @@ public class AddTower : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 	public void OnDrag(PointerEventData eventData)
 	{
-		Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		go.transform.position = new Vector3(pos.x, pos.y, 5);
-		if (raycastHit2D.transform?.tag == null || raycastHit2D.transform.tag != "empty")
+		if (gameManager.gm.playerEnergy >= gameManager.gm.playerEnergy - myObjToSpawn.GetComponent<towerScript>().energy)
 		{
-			go.transform.GetComponent<SpriteRenderer>().color = Color.red;
+			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			go.transform.position = new Vector3(pos.x, pos.y, 5);
+			if (raycastHit2D.transform?.tag == null || raycastHit2D.transform.tag != "empty")
+			{
+				go.transform.GetComponent<SpriteRenderer>().color = Color.red;
+			}
+			else
+				go.transform.GetComponent<SpriteRenderer>().color = color;
 		}
-		else
-			go.transform.GetComponent<SpriteRenderer>().color = color;
 	}
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		if (raycastHit2D.transform?.tag != null && raycastHit2D.transform.tag != "tower" && raycastHit2D.transform.tag == "empty")
+		if (gameManager.gm.playerEnergy >= gameManager.gm.playerEnergy - myObjToSpawn.GetComponent<towerScript>().energy)
 		{
-			go.transform.position = new Vector3(raycastHit2D.transform.position.x, raycastHit2D.transform.position.y, 1);
-			go.transform.parent = raycastHit2D.transform;
-			go.GetComponent<towerScript>().enabled = true;
-		}
-		else
-		{
-			GameObject.Destroy(go);
+			if (raycastHit2D.transform?.tag != null && raycastHit2D.transform.tag != "tower" && raycastHit2D.transform.tag == "empty")
+			{
+				GameObject.Destroy(go);
+				go = GameObject.Instantiate(myObjToSpawn);
+				gameManager.gm.playerEnergy -= go.GetComponent<towerScript>().energy;
+				go.transform.position = new Vector3(raycastHit2D.transform.position.x, raycastHit2D.transform.position.y, 1);
+				go.transform.parent = raycastHit2D.transform;
+				go = null;
+				// go.GetComponent<towerScript>().enabled = true;
+			}
+			else
+			{
+				GameObject.Destroy(go);
+			}
 		}
 	}
 
@@ -70,8 +84,12 @@ public class AddTower : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 	void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
 	{
-		Debug.Log(eventData);
-		go = GameObject.Instantiate(myObjToSpawn);
-		color = go.GetComponent<SpriteRenderer>().color;
+		if (gameManager.gm.playerEnergy >= gameManager.gm.playerEnergy - myObjToSpawn.GetComponent<towerScript>().energy)
+		{
+			// Debug.Log(eventData);
+			go = GameObject.Instantiate(sprite, Camera.main.ScreenToWorldPoint(Input.mousePosition), Quaternion.identity);
+			// go = GameObject.Instantiate(myObjToSpawn);
+			color = go.GetComponent<SpriteRenderer>().color;
+		}
 	}
 }
