@@ -41,7 +41,7 @@ public class AddTower : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 	public void OnDrag(PointerEventData eventData)
 	{
 		Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		go.transform.position = new Vector3(pos.x, pos.y, 1);
+		go.transform.position = new Vector3(pos.x, pos.y, 5);
 		if (raycastHit2D.transform?.tag == null || raycastHit2D.transform.tag != "empty")
 		{
 			go.transform.GetComponent<SpriteRenderer>().color = Color.red;
