@@ -29,11 +29,16 @@ public class Collisions : MonoBehaviour
 				Debug.Log("WIN");
 			}
 			if (other.transform.tag == "KeyCard")
+			{
 				PlayerObjects.playerObjects.HasKeyCard(true);
+				GameObject.Destroy(other.transform.gameObject);
+			}
 			if (other.transform.tag == "LowerDetection")
 				Detection.det.ChangeDecRate(true);
 			if (other.transform.tag == "Lazors")
-				SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+				GameManager.game.Lose();
+			if (other.transform.tag == "Papers")
+				GameManager.game.Win();
 		}
 	}
 }

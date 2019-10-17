@@ -46,7 +46,11 @@ public class PlayerMove : MonoBehaviour
 	}
 
 	private void Update() {
-		Look();
-		Move();
+		
+		if (Time.timeScale != 0)
+		{
+			Look();
+			Move();
+		}
 	}
 }

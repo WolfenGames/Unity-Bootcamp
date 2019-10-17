@@ -12,6 +12,7 @@ TagManager:
   - KeyCard
   - Switcheroo
   - Door
+  - WinLose
   layers:
   - Default
   - TransparentFX
