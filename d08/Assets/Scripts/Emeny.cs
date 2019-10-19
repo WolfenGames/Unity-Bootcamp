@@ -24,34 +24,43 @@ public class Emeny : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(this.transform.position, target.transform.position) < 14)
-			navMeshAgent.SetDestination(target.transform.position);
+		if (Health > 0)
+		{
+			if (Vector3.Distance(this.transform.position, target.transform.position) < 14)
+				navMeshAgent.SetDestination(target.transform.position);
 
-		attacking = (Vector3.Distance(this.transform.position, target.transform.position) < 2.3f);
-		if (attacking)
-			target.transform.GetComponent<Player>().AttackPlayer(3);
+			attacking = (Vector3.Distance(this.transform.position, target.transform.position) < 2.3f);
+			if (attacking)
+				target.transform.GetComponent<Player>().AttackPlayer(1 * Time.deltaTime);
+		}
 		UpdateAnimator();
     }
 
 	private void UpdateAnimator() {
 		animator.SetBool("Attacking", attacking);
-		animator.SetFloat("Health", Health);
-		animator.SetFloat("Distance", navMeshAgent.remainingDistance - navMeshAgent.stoppingDistance);
+		animator.SetFloat("Health", Health - 1);
+		animator.SetFloat("Distance", (attacking) ? 0 : navMeshAgent.remainingDistance);
 	}
 
-	public void AmIDead()
+	public bool AmIDead()
 	{
 		if (Health < 0)
+		{
 			StartCoroutine("DIEMOFO");
+			return true;
+		}
+		return false;
 	}
 
 	IEnumerator	DIEMOFO()
 	{
+		this.GetComponent<NavMeshAgent>().enabled = false;
 		int			i = 0;
+		yield return new WaitForSeconds(3);
 		while( i < 15 )
 		{
 			float		y = this.transform.position.y;
-			this.transform.position = new Vector3(this.transform.position.x, y - 3, this.transform.position.z);
+			this.transform.position = new Vector3(this.transform.position.x, y - 1 * Time.deltaTime, this.transform.position.z);
 			i++;
 		}
 		yield return new WaitForSeconds(5);

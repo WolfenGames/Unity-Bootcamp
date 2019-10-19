@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
 	{
 		animator.SetBool("Attacking", attacking);
 		animator.SetFloat("Health", health);
-		animator.SetFloat("Distance", distance);
+		animator.SetFloat("Distance", (attacking) ? 0 : distance);
 	}
 
 	void SetDestination()
@@ -77,8 +77,9 @@ public class Player : MonoBehaviour
 			if (target)
 			{
 				attacking = target;
-				target.GetComponent<Emeny>().Attack(1);
-				hit.transform.gameObject.GetComponent<Emeny>().AmIDead();
+				target.GetComponent<Emeny>().Attack(1 * Time.deltaTime);
+				if (target.GetComponent<Emeny>().AmIDead())
+					target = null;
 			}
 		}
 		UpdateAnimator();
@@ -96,6 +97,7 @@ public class Player : MonoBehaviour
 		if (attacking && hit.transform?.tag != null && hit.transform.tag == "Emeny")
 		{
 			target = hit.transform.gameObject;
+			naveMeshAgent.SetDestination(target.transform.position);
 		}
 	}
 
