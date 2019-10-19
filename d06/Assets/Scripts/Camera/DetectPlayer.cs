@@ -8,10 +8,12 @@ public class DetectPlayer : MonoBehaviour
 	{
 		Transform	goTransform = go.transform;
 		var v3 = new Vector3(go.transform.position.x, 1, go.transform.position.z);
-		float		dot = Vector3.Dot(this.transform.forward, v3 - this.transform.position);
-		RaycastHit	raycastHit;
+		Vector3 copy_trans = this.transform.forward;
+		copy_trans.Normalize();  
 		var dir = (v3 - transform.position);
 		dir.Normalize();
+		float		dot = Vector3.Dot(this.transform.forward, dir);
+		RaycastHit	raycastHit;
 		Physics.Raycast(this.transform.position, dir, out raycastHit, Mathf.Infinity);
 		float dist = Vector3.Distance(v3, this.transform.position);
 		bool inDist = (Vector3.Distance(v3, this.transform.position) > 0.5f && Vector3.Distance(v3, this.transform.position) < 20 && dot >= 0.8f);

@@ -13,6 +13,7 @@ TagManager:
   - Switcheroo
   - Door
   - WinLose
+  - Papers
   layers:
   - Default
   - TransparentFX

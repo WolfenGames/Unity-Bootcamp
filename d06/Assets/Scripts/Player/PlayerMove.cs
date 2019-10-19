@@ -32,8 +32,8 @@ public class PlayerMove : MonoBehaviour
 		rotY += look.y * yspeed;
 
 		rotX = Mathf.Clamp(rotX, minclamp, maxclamp);
-		currRotX = Mathf.SmoothDamp(currRotX, rotX, ref rotXVel, smoothDamp);
-		currRotY = Mathf.SmoothDamp(currRotY, rotY, ref rotYVel, smoothDamp);
+		currRotX = rotX;
+		currRotY = rotY;
 		Camera.main.transform.rotation = Quaternion.Euler(currRotX, currRotY,  0);
 		transform.rotation = Quaternion.Euler(0, currRotY + 90, 0);
 	}
